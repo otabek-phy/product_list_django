@@ -31,3 +31,8 @@ def category_detail(request,category):
         "products": products,
     }
     return render(request, 'shop/home.html',context)
+
+
+
+def add_comment():
+    pass
