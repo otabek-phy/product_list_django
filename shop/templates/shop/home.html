@@ -29,8 +29,9 @@
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="#!">All Products</a></li>
                                 <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-                                <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
+                                {% for category in categories %}
+                                <li><a class="dropdown-item" href="{% url 'home_category' category.id %}">{{ category.title }}</a></li>
+                                {% endfor %}
                             </ul>
                         </li>
                     </ul>
@@ -82,7 +83,11 @@
                         <div class="col mb-5">
                         <div class="card h-100">
                             <!-- Sale badge-->
-                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                        {% if product.discount %}
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
+                                Sale
+                            </div>
+                        {% endif %}
                             <!-- Product image-->
                             <img class="card-img-top" src="{{ product.image.url }}" alt="..." />
                             <!-- Product details-->
@@ -92,15 +97,21 @@
                                     <h5 class="fw-bolder">{{ product.name }}</h5>
                                     <!-- Product reviews-->
                                     <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
+                                    {% with ''|center:product.rating as range %}
+                                        {% for f in range %}
+                                            <div class="bi-star-fill"></div>
+                                        {% endfor %}
+                                    {% endwith %}
                                     </div>
                                     <!-- Product price-->
-                                    <span class="text-muted text-decoration-line-through">${{ product.price }}</span></br>
+                                    {% if product.discount %}
+                                        <span class="text-muted text-decoration-line-through">
+                                        ${{ product.price }}
+                                        </span></br>
                                     ${{ product.discounted_price }}
+                                    {% else %}
+                                        ${{ product.price }}
+                                    {% endif %}
                                 </div>
                             </div>
                             <!-- Product actions-->
