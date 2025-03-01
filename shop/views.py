@@ -1,6 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+from pydoc import describe
+
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404, redirect
 
 from shop.models import Product, Category
+from shop.forms import ProductForm
 
 
 # Create your views here.
@@ -33,6 +38,33 @@ def category_detail(request,category):
     return render(request, 'shop/home.html',context)
 
 
+# @login_required(login_url='/admin/')
+# def product_create(request):
+#     form = ProductModelForm()
+#     if request.method == 'POST':
+#         form = ProductModelForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('index')
+#
+#     context = {
+#         'form': form
+#     }
+#     return render(request, 'shop/add-product.html', context)
 
-def add_comment():
-    pass
+
+
+@login_required(login_url='/admin/')
+def product_create(request):
+    form = ProductForm()
+    if request.method == "POST":
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+
+
+    context = {
+        'form': form
+    }
+    return render(request, 'shop/add-product.html', context)
