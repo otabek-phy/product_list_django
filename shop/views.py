@@ -68,3 +68,14 @@ def product_create(request):
         'form': form
     }
     return render(request, 'shop/add-product.html', context)
+
+
+
+
+def product_delete(request, pk):
+    try:
+        product = Product.objects.get(id=pk)
+        product.delete()
+        return redirect('index')
+    except Product.DoesNotExist as e:
+        print(e)
