@@ -1,3 +1,5 @@
+from msilib.schema import ListView
+
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
@@ -145,3 +147,10 @@ def order_view(request, pk):
                     'Something is wrong'
                 )
     return render(request, 'shop/detail.html', {'form': form, 'product': product})
+
+
+
+
+
+class ProductListView(ListView):
+    pass
