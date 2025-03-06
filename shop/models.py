@@ -28,12 +28,7 @@ class Category(BaseModel):
 
 
 class Product(BaseModel):
-    class Ratingchoice(models.IntegerChoices):
-        ONE = 1
-        TWO = 2
-        THREE = 3
-        FOUR = 4
-        FIVE = 5
+
 
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField(null=True, blank=True)
@@ -41,7 +36,6 @@ class Product(BaseModel):
     quantity = models.PositiveIntegerField(default=0)
     image = models.ImageField(upload_to='images/', null=True, blank=True, default='images/default png.png')
     discount = models.PositiveIntegerField(default=0)
-    rating = models.PositiveIntegerField(choices=Ratingchoice.choices, default=Ratingchoice.ONE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', null=True, blank=True)
 
     @property
@@ -60,3 +54,23 @@ class Product(BaseModel):
         verbose_name = "Product"
         verbose_name_plural = "Products"
 
+
+
+
+class Comment(BaseModel):
+    class Ratingchoice(models.IntegerChoices):
+        ONE = 1
+        TWO = 2
+        THREE = 3
+        FOUR = 4
+        FIVE = 5
+    full_name = models.CharField(max_length=120, null=True, blank=True)
+    email = models.EmailField()
+    content = models.TextField()
+    rating = models.PositiveIntegerField(choices=Ratingchoice.choices, default=Ratingchoice.ONE)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='comments')
+    is_private = models.BooleanField(default=False)
+
+
+    def __str__(self):
+        return f'{self.email} => {self.rating} => {self.product.name}'
