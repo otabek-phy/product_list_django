@@ -1,4 +1,3 @@
-from msilib.schema import ListView
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
@@ -14,13 +13,25 @@ from django.db.models import Avg
 def index(request, category_id: int | None = None):
     search_query = request.GET.get('q', '')
     categories = Category.objects.all()
+    filter_query = request.GET.get('filter', '')
 
     if category_id:
         products = Product.objects.filter(category_id=category_id)
     else:
         products = Product.objects.all().order_by('-updated_at')  # select * from products order by updated_at DESC
+
     if search_query:
         products = Product.objects.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
+
+    if filter_query == 'expensive':
+        products = products.order_by('-price')
+
+    elif filter_query == 'cheap':
+        products = products.order_by('price')
+
+    elif filter_query == 'rating':
+        products = products.annotate(rating_avg=Avg('comments__rating')).order_by('-rating_avg')
+
     context = {
         'products': products,
         'categories': categories
@@ -38,7 +49,7 @@ def product_detail(request, product_id):
         'product': product,
         'categories': categories,
         'comments': comments,
-        'related_products': related_products,
+        'related_products': related_products
     }
     return render(request, 'shop/detail.html', context)
 
@@ -150,7 +161,3 @@ def order_view(request, pk):
                     'Something is wrong'
                 )
     return render(request, 'shop/detail.html', {'form': form, 'product': product})
-
-
-
-
