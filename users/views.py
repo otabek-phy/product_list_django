@@ -9,11 +9,11 @@ def login_page(request):
         password = request.POST.get("password")
 
         try:
-            user = User.objects.get(email=email)  # Email bo‘yicha foydalanuvchini topamiz
+            user = User.objects.get(email=email)
             user = authenticate(request, username=user.username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("home")  # Muvaffaqiyatli login bo‘lsa, home sahifasiga yo‘naltiramiz
+                return redirect("home")
             else:
                 messages.error(request, "Email yoki parol noto‘g‘ri!")
         except User.DoesNotExist:
@@ -31,4 +31,5 @@ def register_page(request):
 
 
 def logout_page(request):
-    pass
+    return render()
+pass
