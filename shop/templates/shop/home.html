@@ -48,7 +48,7 @@
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                {% for product in products %}
+                {% for product in page_obj %}
                     <div class="col mb-5">
                         <div class="card h-100">
                             <!-- Sale badge-->
@@ -93,6 +93,36 @@
                 {% endfor %}
 
             </div>
+        </div>
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="pagination-container">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link first" href="?page=1" title="First Page">&laquo;&laquo;</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link prev" href="?page={{ page_obj.previous_page_number }}" title="Previous Page">&laquo;</a>
+            </li>
+        {% endif %}
+
+        <li class="page-item active">
+            <span class="page-link current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+        </li>
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link next" href="?page={{ page_obj.next_page_number }}" title="Next Page">&raquo;</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link last" href="?page={{ page_obj.paginator.num_pages }}" title="Last Page">&raquo;&raquo;</a>
+            </li>
+        {% endif %}
+    </ul>
+</div>
+
         </div>
     </section>
 {% endblock %}
