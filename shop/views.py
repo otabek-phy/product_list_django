@@ -2,9 +2,14 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+
 from shop.models import Product, Category
 from shop.forms import ProductModelForm, CommentModelForm, OrderModelForm
 from django.db.models import Avg
+
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -32,8 +37,12 @@ def index(request, category_id: int | None = None):
     elif filter_query == 'rating':
         products = products.annotate(rating_avg=Avg('comments__rating')).order_by('-rating_avg')
 
+    paginator = Paginator(products, 2)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context = {
-        'products': products,
+        'page_obj': page_obj,
         'categories': categories
     }
     return render(request, 'shop/home.html', context)
@@ -68,21 +77,36 @@ def product_detail(request, product_id):
 #     }
 #     return render(request, 'shop/product-create.html', context)
 
-@login_required(login_url='/admin/')
-def product_create(request):
-    form = ProductModelForm()
-    if request.method == 'POST':
-        form = ProductModelForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
+# @login_required(login_url='/admin/')
+# def product_create(request):
+#     form = ProductModelForm()
+#     if request.method == 'POST':
+#         form = ProductModelForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#
+#             return redirect('index')
+#
+#     context = {
+#         'form': form,
+#         'action': 'Create'
+#     }
+#     return render(request, 'shop/product-create.html', context)
+class ProductCreateView(CreateView):
+    model = Product
+    template_name = 'shop/product-create.html'
+    form_class = ProductModelForm
+    success_url = reverse_lazy('shop:index')
 
-            return redirect('index')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['action'] = 'Create'
+        return context
 
-    context = {
-        'form': form,
-        'action': 'Create'
-    }
-    return render(request, 'shop/product-create.html', context)
+    def get_success_url(self):
+        #email logic
+        pass
+
 
 
 @login_required(login_url='/admin/')
