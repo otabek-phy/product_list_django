@@ -12,6 +12,11 @@ urlpatterns = [
     path('product-delete/<int:product_id>/', views.product_delete, name='product_delete'),
     path('product-update/<int:product_id>/', views.product_update, name='product_update'),
     path('comment-view/<int:pk>/', views.comment_view, name='comment_view'),
+<<<<<<< HEAD
     path('order-view/<int:pk>/', views.order_view, name='order_view')
     
 ]
+=======
+    path('order-view/<int:pk>/', views.order_view, name='order_view'),
+]
+>>>>>>> bec937dddbf6a56e72c19afbac1753913be1532a

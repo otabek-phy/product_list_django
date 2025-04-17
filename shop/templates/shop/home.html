@@ -94,6 +94,7 @@
 
             </div>
         </div>
+<<<<<<< HEAD
         <div>
             <div class="pagination h-100 d-flex align-items-center justify-content-center">
                 <span class="step-links">
@@ -112,6 +113,37 @@
                     {% endif %}
                 </span>
             </div>
+=======
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="pagination-container">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link first" href="?page=1" title="First Page">&laquo;&laquo;</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link prev" href="?page={{ page_obj.previous_page_number }}" title="Previous Page">&laquo;</a>
+            </li>
+        {% endif %}
+
+        <li class="page-item active">
+            <span class="page-link current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+        </li>
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link next" href="?page={{ page_obj.next_page_number }}" title="Next Page">&raquo;</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link last" href="?page={{ page_obj.paginator.num_pages }}" title="Last Page">&raquo;&raquo;</a>
+            </li>
+        {% endif %}
+    </ul>
+</div>
+
+>>>>>>> bec937dddbf6a56e72c19afbac1753913be1532a
         </div>
     </section>
 {% endblock %}
