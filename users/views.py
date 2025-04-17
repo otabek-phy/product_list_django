@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -71,7 +71,7 @@ def register_page(request):
         'form': form,
     }
     return render(request, 'users/register.html', context)
-=======
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -113,12 +113,12 @@ def register_page(request):
             user.save()
             messages.success(request, "Muvaffaqiyatli ro'yxatdan o'tdingiz! Login qiling.")
             return redirect('login')
->>>>>>> bec937dddbf6a56e72c19afbac1753913be1532a
+
 
     return render(request, 'users/register.html')
 
 def logout_page(request):
-<<<<<<< HEAD
+
     if request.method == 'POST':
         logout(request)
         return redirect('shop:index')
@@ -188,8 +188,8 @@ def verify_email_confirm(request, uidb64, token):
     else:
         messages.warning(request, 'The link is invalid.')
     return render(request, 'users/email/verify_email_confirm.html')
-=======
+
     logout(request)
     messages.success(request, "Tizimdan muvaffaqiyatli chiqdingiz!")
     return redirect('login')
->>>>>>> bec937dddbf6a56e72c19afbac1753913be1532a
+
